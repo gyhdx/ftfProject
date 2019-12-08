@@ -20,8 +20,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Users findById() {
-        return userMapper.sclectById();
+    public Users findById(String userId) {
+        return userMapper.sclectById(userId);
     }
 
     @Override

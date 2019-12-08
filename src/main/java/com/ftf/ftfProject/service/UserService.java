@@ -8,7 +8,7 @@ public interface UserService {
 
     List<Users> selectAll();
 
-    Users findById();
+    Users findById(String userId);
     Users findByEmail(String email);
 
     void addUser(Users users);

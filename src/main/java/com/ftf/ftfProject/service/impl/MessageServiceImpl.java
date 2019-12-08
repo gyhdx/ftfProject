@@ -18,4 +18,9 @@ public class MessageServiceImpl implements MessageService {
     public List<Message> getAllMessage() {
         return messageMapper.getAllMessage();
     }
+
+    @Override
+    public void updateMessageState(String messagesId, Integer state) {
+        messageMapper.updateMessageState(messagesId,state);
+    }
 }

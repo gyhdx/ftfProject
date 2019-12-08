@@ -13,8 +13,8 @@ public interface UserMapper {
     @Select("select * from users")
     List<Users> selectAll();
 
-    @Select("select * from users where user_id=1")
-    Users sclectById();
+    @Select("select * from users where user_id=#{id}")
+    Users sclectById(String id);
 
     @Select("select * from users where user_email=#{email}")
     Users selectByEmail(String email);
