@@ -3,6 +3,7 @@ package com.ftf.ftfProject.mapper;
 import com.ftf.ftfProject.entity.Users;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -22,4 +23,7 @@ public interface UserMapper {
     @Insert("insert into users(user_email,user_password,user_nikename,user_time,user_sex,user_status,user_Img,user_birthday)" +
             " values(#{userEmail},#{userPassword},#{userNikename},#{userTime},#{userSex},#{userStatus},#{userImg},#{userBirthday})")
     void insertUser(Users users);
+
+    @Update("update users set user_count=#{i} where user_id=#{id}")
+    void updateUserCount(int i, String id);
 }

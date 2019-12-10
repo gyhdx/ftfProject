@@ -6,8 +6,11 @@ import lombok.ToString;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @ToString
+@Setter
+@Getter
 public class Users implements Serializable {
 
     private String userId;
@@ -16,10 +19,14 @@ public class Users implements Serializable {
     private String userNikename;
     private Date userTime;//注册时间
     private String userSex;
-    private int userStatus;
+    private Integer userStatus;
+    private Integer userCount;//登录次数
+    private Date userLasttime;//登录次数
     private String userStatusStr;
     private String userImg;
     private Date userBirthday;
+    private Integer messages;
+    private List<Message> messageList;
 
     public String getUserId() {
         return userId;
@@ -104,5 +111,41 @@ public class Users implements Serializable {
 
     public void setUserBirthday(Date userBirthday) {
         this.userBirthday = userBirthday;
+    }
+
+    public Integer getMessages() {
+        return messages;
+    }
+
+    public void setMessages(Integer messages) {
+        this.messages = messages;
+    }
+
+    public List<Message> getMessageList() {
+        return messageList;
+    }
+
+    public void setMessageList(List<Message> messageList) {
+        this.messageList = messageList;
+    }
+
+    public void setUserStatus(Integer userStatus) {
+        this.userStatus = userStatus;
+    }
+
+    public Integer getUserCount() {
+        return userCount;
+    }
+
+    public void setUserCount(Integer userCount) {
+        this.userCount = userCount;
+    }
+
+    public Date getUserLasttime() {
+        return userLasttime;
+    }
+
+    public void setUserLasttime(Date userLasttime) {
+        this.userLasttime = userLasttime;
     }
 }

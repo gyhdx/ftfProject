@@ -1,7 +1,9 @@
 package com.ftf.ftfProject.view;
 
 import com.alibaba.fastjson.JSONObject;
+import com.ftf.ftfProject.entity.Message;
 import com.ftf.ftfProject.entity.Users;
+import com.ftf.ftfProject.service.MessageService;
 import com.ftf.ftfProject.service.UserService;
 import com.ftf.ftfProject.utils.EmailUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.Date;
+import java.util.List;
 
 @Controller
 @RequestMapping("/user")
@@ -23,16 +26,38 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private MessageService messageService;
 
     public static String YZM=null;
 
+    @RequestMapping("/getAllUser")
+    @ResponseBody
+    public List<Users> getAllUser(){
+        List<Users> users = userService.selectAll();
+        for (Users user : users) {
+            List<Message> messages = messageService.getMessageByUserId(user.getUserId());
+//            System.out.println(messages);
+            user.setMessageList(messages);
+            user.setMessages(messages.size());
+        }
+//        System.out.println("------------------------");
+//        System.out.println(users);
+        return users;
+    }
+
+
+
     @RequestMapping("/findById")
-    public boolean findById(@RequestBody Users user){
+    public boolean findById(@RequestBody Users user,HttpServletRequest request){
         Users users = userService.findByEmail(user.getUserEmail());
         if (users==null){
             return false;
         }
         if (user.getUserEmail().equals(users.getUserEmail())&&user.getUserPassword().equals(users.getUserPassword())){
+            request.getSession().setAttribute("user",user);
+//            System.out.println(users);
+            userService.updateUserCount(users.getUserCount()+1,users.getUserId());
             return true;
         }
         return false;
@@ -50,6 +75,7 @@ public class UserController {
             users.setUserPassword(userPassword);
             users.setUserTime(new Date());
             userService.addUser(users);
+
             return true;
         }else {
             return false;
@@ -77,18 +103,5 @@ public class UserController {
             return false;
         }
         return true;
-    }
-
-    @RequestMapping("/t1")
-    public String test1(HttpServletRequest request, HttpServletResponse response){
-        HttpSession session = request.getSession();
-        session.setAttribute("a","wf");
-        return "t1";
-
-    }
-    @RequestMapping("/t2")
-    public String test2(HttpSession session){
-        System.out.println(session.getAttribute("a"));
-        return "t2";
     }
 }

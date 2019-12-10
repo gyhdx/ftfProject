@@ -12,4 +12,6 @@ public interface UserService {
     Users findByEmail(String email);
 
     void addUser(Users users);
+
+    void updateUserCount(int i, String userId);
 }

@@ -15,6 +15,9 @@ public interface MessageMapper {
 
     @Update("update message set messages_state=#{state} where messages_id=#{messagesId}")
     void updateMessageState(String messagesId, Integer state);
+
+    @Select("select * from message where user_id = #{userId}")
+    List<Message> getMessageByUserId(String userId);
 }
 
 

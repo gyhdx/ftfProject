@@ -33,4 +33,9 @@ public class UserServiceImpl implements UserService {
     public void addUser(Users users) {
         userMapper.insertUser(users);
     }
+
+    @Override
+    public void updateUserCount(int i, String userId) {
+        userMapper.updateUserCount(i,userId);
+    }
 }
