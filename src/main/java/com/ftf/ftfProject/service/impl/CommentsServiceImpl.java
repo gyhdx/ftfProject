@@ -18,4 +18,9 @@ public class CommentsServiceImpl implements CommentsService {
     public List<Comments> getAllComments() {
         return commentsMapper.getAllComments();
     }
+
+    @Override
+    public List<Comments> getComByMesId(String messagesId) {
+        return commentsMapper.getComByMesId(messagesId);
+    }
 }

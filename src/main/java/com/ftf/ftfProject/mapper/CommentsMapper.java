@@ -11,4 +11,7 @@ public interface CommentsMapper {
 
     @Select("select * from comments")
     List<Comments> getAllComments();
+
+    @Select("select * from comments where message_id = #{messagesId}")
+    List<Comments> getComByMesId(String messagesId);
 }

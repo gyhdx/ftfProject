@@ -1,11 +1,14 @@
 package com.ftf.ftfProject.mapper;
 
+import com.ftf.ftfProject.entity.Role;
 import com.ftf.ftfProject.entity.Users;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -26,4 +29,19 @@ public interface UserMapper {
 
     @Update("update users set user_count=#{i} where user_id=#{id}")
     void updateUserCount(int i, String id);
+
+    @Update("update users set user_status=#{i} where user_id=#{id}")
+    void updateUserState(int i, String id);
+
+    @Delete("delete from users where user_id=#{id}")
+    void deleteUser(String id);
+
+    @Select("select count(user_id) from users")
+    int gstUserCount();
+
+    @Select("select * from role where role_id = (select role_id from role_user where users_id = #{id})")
+    Role getRoleById(String id);
+
+    @Update("update users set user_lasttime=#{date} where user_id=#{id}")
+    void updateLastTime(Date date, String id);
 }

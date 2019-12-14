@@ -3,6 +3,7 @@ package com.ftf.ftfProject.view;
 import com.alibaba.fastjson.JSONObject;
 import com.ftf.ftfProject.entity.Message;
 import com.ftf.ftfProject.entity.Users;
+import com.ftf.ftfProject.service.LoggerService;
 import com.ftf.ftfProject.service.MessageService;
 import com.ftf.ftfProject.service.UserService;
 import com.ftf.ftfProject.utils.EmailUtil;
@@ -14,8 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.util.Date;
 import java.util.List;
 
@@ -29,24 +28,42 @@ public class UserController {
     @Autowired
     private MessageService messageService;
 
+    @Autowired
+    private LoggerService loggerService;
+
     public static String YZM=null;
 
     @RequestMapping("/getAllUser")
     @ResponseBody
-    public List<Users> getAllUser(){
+    public List<Users> getAllUser(HttpServletRequest request){
         List<Users> users = userService.selectAll();
-        for (Users user : users) {
-            List<Message> messages = messageService.getMessageByUserId(user.getUserId());
-//            System.out.println(messages);
-            user.setMessageList(messages);
-            user.setMessages(messages.size());
-        }
-//        System.out.println("------------------------");
-//        System.out.println(users);
+        Users user = (Users) request.getSession().getAttribute("user");
+        loggerService.addLogger(user.getUserId(),"查看用户管理");
         return users;
     }
 
+    @RequestMapping("/getUserInfo")
+    public Users getUserInfo(HttpServletRequest request){
+        Users user = (Users) request.getSession().getAttribute("user");
+//        System.out.println();
+        return user;
+    }
 
+    @RequestMapping("/deleteUser")
+    public void deleteUser(@RequestParam("id")String userID){
+        userService.deleteUser(userID);
+    }
+
+    @RequestMapping("/updateUserState")
+    public Users updateUserState(@RequestParam("id")String userID){
+        Users users = userService.findById(userID);
+        if (users.getUserStatus()==1){
+            userService.updateUserState(0,userID);
+        }else {
+            userService.updateUserState(1,userID);
+        }
+        return null;
+    }
 
     @RequestMapping("/findById")
     public boolean findById(@RequestBody Users user,HttpServletRequest request){
@@ -54,10 +71,13 @@ public class UserController {
         if (users==null){
             return false;
         }
-        if (user.getUserEmail().equals(users.getUserEmail())&&user.getUserPassword().equals(users.getUserPassword())){
-            request.getSession().setAttribute("user",user);
+        if (user.getUserEmail().equals(users.getUserEmail())&&user.getUserPassword().equals(users.getUserPassword())&&users.getUserStatus()==1){
+            request.getSession().setAttribute("user",users);
 //            System.out.println(users);
             userService.updateUserCount(users.getUserCount()+1,users.getUserId());
+            loggerService.addLogger(users.getUserId(),"登录系统");
+            Date date = new Date();
+            userService.updateLastTime(date,users.getUserId());
             return true;
         }
         return false;
@@ -74,6 +94,7 @@ public class UserController {
             users.setUserEmail(userEmail);
             users.setUserPassword(userPassword);
             users.setUserTime(new Date());
+            users.setUserStatus(1);
             userService.addUser(users);
 
             return true;

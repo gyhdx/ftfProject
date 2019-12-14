@@ -28,4 +28,9 @@ public class MessageServiceImpl implements MessageService {
     public List<Message> getMessageByUserId(String userId) {
         return messageMapper.getMessageByUserId(userId);
     }
+
+    @Override
+    public int gstUserCount() {
+        return messageMapper.gstUserCount();
+    }
 }

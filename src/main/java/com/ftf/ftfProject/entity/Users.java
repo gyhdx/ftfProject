@@ -27,6 +27,15 @@ public class Users implements Serializable {
     private Date userBirthday;
     private Integer messages;
     private List<Message> messageList;
+    private Role role;
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
 
     public String getUserId() {
         return userId;
@@ -88,7 +97,7 @@ public class Users implements Serializable {
         if (userStatus == 1){
             userStatusStr = "正常";
         }else {
-            userStatusStr = "异常";
+            userStatusStr = "不可用";
         }
         return userStatusStr;
     }

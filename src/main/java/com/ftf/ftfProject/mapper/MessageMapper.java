@@ -18,6 +18,9 @@ public interface MessageMapper {
 
     @Select("select * from message where user_id = #{userId}")
     List<Message> getMessageByUserId(String userId);
+
+    @Select("select count(messages_id) from message")
+    int gstUserCount();
 }
 
 

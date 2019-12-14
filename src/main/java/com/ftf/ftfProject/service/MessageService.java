@@ -11,4 +11,6 @@ public interface MessageService {
     void updateMessageState(String messagesId, Integer state);
 
     List<Message> getMessageByUserId(String userId);
+
+    int gstUserCount();
 }
